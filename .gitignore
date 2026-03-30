@@ -40,3 +40,9 @@ Plugins/*/Saved/
 !*.uplugin
 !Config/
 !Source/
+
+# ==========================================
+# TEMPLATE & JUNK FILES EXCLUSION
+# ==========================================
+SunTemple.*
+"Новый текстовый документ.txt".*
