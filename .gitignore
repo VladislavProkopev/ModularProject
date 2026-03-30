@@ -1,0 +1,42 @@
+# ==========================================
+# UNREAL ENGINE: GENERATED & TEMPORARY FILES
+# ==========================================
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+.fbuild/
+
+# ==========================================
+# IDE & OS METADATA
+# ==========================================
+.idea/
+.vs/
+.vscode/
+*.sln
+*.suo
+*.xcworkspace
+*.ds_store
+
+# ==========================================
+# ASSETS & CONTENT (CODE-ONLY MODE)
+# ==========================================
+# Игнорируем весь визуальный и бинарный контент проекта
+Content/
+
+# Игнорируем контент внутри всех модульных плагинов
+Plugins/*/Content/
+Plugins/*/Resources/
+Plugins/*/Intermediate/
+Plugins/*/Binaries/
+Plugins/*/Saved/
+
+# ==========================================
+# EXCLUSIONS (FORCE TRACK)
+# ==========================================
+# Гарантируем, что базовые файлы инициализации не будут проигнорированы
+!*.uproject
+!*.uplugin
+!Config/
+!Source/
