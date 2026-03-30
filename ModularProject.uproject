@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{E4C37AE3-4422-EDBA-032E-4A8ACC0EEC29}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "ModularProject",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
