@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "CoreInventory",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "Prokopev Vladislav",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "CoreInventory",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

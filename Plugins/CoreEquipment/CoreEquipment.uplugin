@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "CoreEquipment",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "Prokopev Vladislav",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "CoreEquipment",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
