@@ -11,5 +11,6 @@ namespace CoreGameplayTags
 	namespace Abilities
 	{
 		UE_DEFINE_GAMEPLAY_TAG(Ability_TEST, "Abilities.TEST");
+		UE_DEFINE_GAMEPLAY_TAG(Ability_AbilityInputBlocked, "Abilities.AbilityInputBlocked");
 	}
 }

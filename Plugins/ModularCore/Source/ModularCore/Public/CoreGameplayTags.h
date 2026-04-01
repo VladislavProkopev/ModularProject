@@ -12,5 +12,6 @@ namespace CoreGameplayTags
 	namespace Abilities
 	{
 		MODULARCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_TEST);
+		MODULARCORE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_AbilityInputBlocked);
 	}
 }
