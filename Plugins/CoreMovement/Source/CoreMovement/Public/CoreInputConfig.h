@@ -8,9 +8,9 @@
 
 class UInputAction;
 class UObject;
-class FFrame;
+struct FFrame;
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FCoreInputAction
 {
 	GENERATED_BODY()

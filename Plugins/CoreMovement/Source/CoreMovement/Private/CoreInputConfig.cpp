@@ -3,6 +3,8 @@
 
 #include "CoreInputConfig.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(CoreInputConfig)
+
 DEFINE_LOG_CATEGORY_STATIC(Log_CoreInputConfig,All,All)
 
 UCoreInputConfig::UCoreInputConfig(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
