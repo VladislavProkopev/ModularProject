@@ -11,6 +11,8 @@
 
 #define PROJ_API MODULARPROJECT_API
 
+class UCoreAbilitySystemComponent;
+
 //TODO Create CoreAbilitySystemComponent in CoreGAS plugin
 
 UCLASS(MinimalAPI)
@@ -22,7 +24,7 @@ public:
 	// Sets default values for this component's properties
 	PROJ_API UProjectPawnExtensionComponent(const FObjectInitializer& OI);
 	virtual void BeginPlay() override;
-	
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	static PROJ_API const FName NAME_ActorFeatureName;
 	
 	//~ Begin IGameFrameworkInitStateInterface
@@ -61,7 +63,6 @@ public:
 protected:
 	
 	PROJ_API virtual void OnRegister() override;
-	PROJ_API virtual void BeginPlay() override;
 	PROJ_API virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	UFUNCTION()
