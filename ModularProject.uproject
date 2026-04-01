@@ -29,6 +29,10 @@
 		{
 			"Name": "AbilitySystemGameFeatureActions",
 			"Enabled": true
+		},
+		{
+			"Name": "CoreFeatures",
+			"Enabled": true
 		}
 	]
 }
