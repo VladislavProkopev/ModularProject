@@ -12,7 +12,7 @@ struct FGameplayAbilitySpec;
 struct FGameplayAbilitySpecHandle;
 
 class AActor;
-class AContorller;
+class AController;
 /* Подумать над этими классами потому что плагин ГАС лежит не в корне как в проекте Лира, а будет отдельным плагином
 class ACoreCharacter;
 class ACoreController
@@ -20,14 +20,10 @@ class ACoreController
 class ACharacter;
 class APlayerController;
 class FText;
-//TODO Interface ICoreAbilitySourceInterface
+class ICoreAbilitySourceInterface;
 class UAnimMontage;
-/*TODO
- *UCoreAbilityCost
- * UCoreAbilitySystemComponent
- * UCoreCameraMode
- * UCoreHeroComponent
- */
+class UCoreAbilityCost;
+class UCoreAbilitySystemComponent;
 class UObject;
 struct FFrame;
 struct FGameplayAbilityActorInfo;
@@ -40,7 +36,7 @@ struct FGameplayEventData;
  *	Defines how an ability is meant to activate.
  */
 UENUM(BlueprintType)
-enum ECoreAbilityActivationPolity : uint8
+enum class ECoreAbilityActivationPolity : uint8
 {
 	// Try to activate the ability when the input is triggered.
 	OnInputTriggered,
@@ -57,7 +53,7 @@ enum ECoreAbilityActivationPolity : uint8
  */
 
 UENUM(BlueprintType)
-enum ECoreAbilityActivationGroup : uint8
+enum class ECoreAbilityActivationGroup : uint8
 {
 	// Ability runs independently of all other abilities.
 	Independent,
@@ -70,7 +66,7 @@ enum ECoreAbilityActivationGroup : uint8
 };
 
 /** Failure reason that can be used to play an animation montage when a failure occurs */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FCoreAbilityMontageFaltureMessage
 {
 	GENERATED_BODY()
@@ -102,7 +98,7 @@ class UCoreGameplayAbility : public UGameplayAbility
 	friend class UCoreAbilitySystemComponent;
 	
 public:
-	GAS_API UCoreGameplayAbility(const FObjectInitializer& OI = FObjectInitializer::Get());
+	GAS_API UCoreGameplayAbility(const FObjectInitializer& OI);
 	
 	UFUNCTION(BlueprintCallable,Category="Core|Ability")
 	GAS_API UCoreAbilitySystemComponent* GetCoreAbilitySystemComponentFromActorInfo() const;
@@ -118,25 +114,27 @@ public:
 	//-----------------------------------------------------------------------------------------------------
 	
 	UFUNCTION(BlueprintCallable,Category="Core|Ability")
-	GAS_API AContorller* GetControllerFromActorInfo() const;
+	GAS_API AController* GetControllerFromActorInfo() const;
 	
 	UFUNCTION(BlueprintCallable,Category="Core|Ability")
 	GAS_API ACharacter* GetCharacterFromActorInfo() const;
 	
-	//-----------------------------------------------------------------------------------------------------
-	UFUNCTION(BlueprintCallable,Category="Core|Ability")
-	/*TODO
-	*В лире тут используется жесткая связь так как гас лежит в проекте а я планирую выносить в плагин
-	*UE_API ALyraCharacter* GetLyraCharacterFromActorInfo() const;
-	*Подумать после над реализацией
-	*/
-	GAS_API ACoreCharacter* GetCoreCharacterFromActorInfo() const;
-	//-----------------------------------------------------------------------------------------------------
-	
-	//TODO Create UCoreHeroComponent
-	UFUNCTION(BlueprintCallable,Category="Core|Ability")
-	GAS_API UCoreHeroComponent* GetHeroComponentFromActorInfo() const;
-	
+	/*TODO Пересмотреть структуру на использование этих методов в переопределенном классе CoreGameplayAbility 
+	 *непосредственно в модуле проекта
+	 *-----------------------------------------------------------------------------------------------------
+	 *UFUNCTION(BlueprintCallable,Category="Core|Ability")
+	 *
+	 *В лире тут используется жесткая связь так как гас лежит в проекте а я планирую выносить в плагин
+	 *UE_API ALyraCharacter* GetLyraCharacterFromActorInfo() const;
+	 *Подумать после над реализацией
+	 *
+	 *GAS_API ACoreCharacter* GetCoreCharacterFromActorInfo() const;
+	 *-----------------------------------------------------------------------------------------------------
+	 *
+	 *TODO Create UCoreHeroComponent
+	 *UFUNCTION(BlueprintCallable,Category="Core|Ability")
+	 *GAS_API UCoreHeroComponent* GetHeroComponentFromActorInfo() const;
+	 */
 	ECoreAbilityActivationPolity GetActivationPolity() const {return ActivationPolity;}
 	ECoreAbilityActivationGroup GetActivationGroup() const {return ActivationGroup;}
 	
@@ -148,13 +146,14 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintPure = false, Category="Core|Ability",Meta = (ExpandBoolAsExecs = "ReturnValue"))
 	GAS_API bool ChangeActivationGroup(ECoreAbilityActivationGroup NewGroup);
 	
-	UFUNCTION(BlueprintCallable,Category="Core|Ability")
-	//TODO Create UCoreCameraMode
-	GAS_API void SetCameraMode(TSubclassOf<UCoreCameraMode> CameraMode);
-	
-	UFUNCTION(BlueprintCallable,Category="Core|Ability")
-	GAS_API ClearCameraMode();
-	
+	/*TODO Create UCoreCameraMode
+	 *Перенести CameraMode в отдельный плагин, дабы не раздувать ГАС классы
+	 *UFUNCTION(BlueprintCallable,Category="Core|Ability")
+	 *GAS_API void SetCameraMode(TSubclassOf<UCoreCameraMode> CameraMode);
+	 *UFUNCTION(BlueprintCallable,Category="Core|Ability")
+	 *GAS_API ClearCameraMode();
+	 * 
+	 */
 	void OnAbilityFailedToActivate(const FGameplayTagContainer& FailedReason)const
 	{
 		NativeOnAbilityFailedToActivate(FailedReason);
@@ -184,7 +183,6 @@ protected:
 	
 	GAS_API virtual void OnPawnAvatarSet();
 	
-	//TODO Create ICoreAbilitySourceInterface
 	GAS_API virtual void GetAbilitySource(FGameplayAbilitySpecHandle Handle,const FGameplayAbilityActorInfo* ActorInfo,float& OutSourceLevel, const ICoreAbilitySourceInterface*& OutAbilitySource, AActor*& OutEffectCauser) const;
 	/** Called when this ability is granted to the ability system component. */
 	UFUNCTION(BlueprintImplementableEvent,Category=Ability,DisplayName="OnAbilityAdded")
@@ -200,25 +198,32 @@ protected:
 	// Defines how this ability is meant to activate.
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Core|Ability Activation")
 	ECoreAbilityActivationPolity ActivationPolity;
+	
 	// Defines the relationship between this ability activating and other abilities activating.
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Core|Ability Activation")
 	ECoreAbilityActivationGroup ActivationGroup;
+	
 	// Additional costs that must be paid to activate this ability
 	UPROPERTY(EditDefaultsOnly,Instanced,Category=Costs)
-	//TODO Create UCoreAbilityCost
 	TArray<TObjectPtr<UCoreAbilityCost>> AdditionalCosts;
+	
 	// Map of failure tags to simple error messages
 	UPROPERTY(EditDefaultsOnly,Category=Advanced)
 	TMap<FGameplayTag,FText> FailtureTagToUserFacingMessages;
+	
 	// Map of failure tags to anim montages that should be played with them
 	UPROPERTY(EditDefaultsOnly,Category=Advanced)
 	TMap<FGameplayTag,TObjectPtr<UAnimMontage>> FailtureAnimMontage;
+	
 	// If true, extra information should be logged when this ability is canceled. This is temporary, used for tracking a bug.
 	UPROPERTY(EditDefaultsOnly,Category=Advanced)
 	bool bLogCancelation;
+	
 	// Current camera mode set by the ability.
-	//TODO UCoreCameraMode
-	TSubclassOf<UCoreCameraMode> ActiveCameraMode;
+	/*TODO UCoreCameraMode
+	*TSubclassOf<UCoreCameraMode> ActiveCameraMode;
+	*Перенести логику камеры в отдельный плагин, дабы не раздувать ГАС и не делать его ГОД обьектом
+	*/
 };
 
 #undef GAS_API
