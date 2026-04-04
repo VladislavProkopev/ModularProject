@@ -25,7 +25,7 @@ public class CoreGAS : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "GameplayAbilities","GameplayTags","GameplayTasks"
+				"Core", "GameplayAbilities","GameplayTags","GameplayTasks", "ModularCore"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
