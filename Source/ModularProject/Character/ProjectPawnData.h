@@ -7,6 +7,10 @@
 #include "CoreInputConfig.h"
 #include "ProjectPawnData.generated.h"
 
+class UCoreGameplayAbility;
+class UCoreAttributeSet;
+class UCoreAbilityTagRelationshipMapping;
+
 #define PROJ_API MODULARPROJECT_API
 /**
  * 
@@ -23,6 +27,15 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|Input")
 	TObjectPtr<UCoreInputConfig> InputConfig;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|Abilities")
+	TObjectPtr<UCoreAbilityTagRelationshipMapping> TagRelationshipMapping;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|Abilities")
+	TArray<TObjectPtr<UCoreAttributeSet>> AbilitySets;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|Abilities")
+	TObjectPtr<UCoreGameplayAbility> StartupAbilityTEST;
 };
 
 #undef PROJ_API
