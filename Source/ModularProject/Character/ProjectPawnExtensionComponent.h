@@ -11,9 +11,10 @@
 
 #define PROJ_API MODULARPROJECT_API
 
+class UProjectPawnData;
 class UCoreAbilitySystemComponent;
 
-//TODO Create CoreAbilitySystemComponent in CoreGAS plugin
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProjectPawnReadyDelegate);
 
 UCLASS(MinimalAPI)
 class UProjectPawnExtensionComponent : public UPawnComponent , public IGameFrameworkInitStateInterface
@@ -41,24 +42,22 @@ public:
 	template<class T>
 	const T* GetPawnData() const {return Cast<T>(PawnData);}
 	
+	// Вызывается для установки данных. В AAA это делается ДО спавна пешки через AssetManager
 	PROJ_API void SetPawnData(const UProjectPawnData* InPawnData);
 	
 	UFUNCTION(BlueprintPure,Category="Project|Pawn")
 	UCoreAbilitySystemComponent* GetCoreAbilitySystemComponent() const {return AbilitySystemComponent;}
 	
 	PROJ_API void InitializeAbilitySystem(UCoreAbilitySystemComponent* InASC,AActor* InOwnerActor);
-	
 	PROJ_API void UnInitializeAbilitySystem();
-	
 	PROJ_API void HandleControllerChanged();
-	
+	// Вызывается из Character::PossessedBy (Server) и Character::OnRep_PlayerState (Client)
 	PROJ_API void HandlePlayerStateReplicated();
-	
 	PROJ_API void SetupPlayerInputComponent();
-	
 	PROJ_API void OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate);
-	
 	PROJ_API void OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate);
+	
+	FProjectPawnReadyDelegate OnProjectPawnReadyDelegate;
 	
 protected:
 	
@@ -71,11 +70,13 @@ protected:
 	FSimpleMulticastDelegate OnAbilitySystemInitialized;
 	FSimpleMulticastDelegate OnAbilitySystemUninitialized;
 	
+	// Push-model репликация для кэшированного DataAsset
 	UPROPERTY(EditInstanceOnly,ReplicatedUsing=OnRep_PawnData,Category="Project|Pawn")
 	TObjectPtr<const UProjectPawnData> PawnData;
 	
 	UPROPERTY(Transient)
 	TObjectPtr<UCoreAbilitySystemComponent> AbilitySystemComponent;
+	
 };
 
 #undef PROJ_API
