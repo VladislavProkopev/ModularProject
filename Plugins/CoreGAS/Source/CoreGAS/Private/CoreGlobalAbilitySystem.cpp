@@ -11,7 +11,7 @@ void FGlobalAppliedAbilityList::AddToASC(TSubclassOf<UGameplayAbility> Ability, 
 	checkf(ASC,TEXT("ASC in FGlobalAppliedAbilityList::AddToASC - invalid or null"));
 	checkf(Ability,TEXT("Ability in FGlobalAppliedAbilityList::AddToASC - invalid or null"));
 	
-	FObjectKey ASCKey(ASC);
+	const FObjectKey ASCKey(ASC);
 	
 	if (Handles.Contains(ASCKey))
 	{
@@ -28,7 +28,7 @@ void FGlobalAppliedAbilityList::RemoveFromASC(UCoreAbilitySystemComponent* ASC)
 {
 	checkf(ASC,TEXT("ASC in FGlobalAppliedAbilityList::RemoveFromASC - invalid or null"));
 	
-	FObjectKey ASCKey(ASC);
+	const FObjectKey ASCKey(ASC);
 	if (FGameplayAbilitySpecHandle* SpecHandle = Handles.Find(ASCKey))
 	{
 		ASC->ClearAbility(*SpecHandle);
