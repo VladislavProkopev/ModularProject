@@ -4,15 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-
+#include "CoreGameplayAbility.h"
 #include "CoreAbilitySystemComponent.generated.h"
 
 #define GAS_API COREGAS_API
 
+class UCoreGameplayAbility;
 class AActor;
 class UGameplayAbility;
-//TODO CoreAbilityTagRelationshipMapping
-class OUbject;
+class UCoreAbilityTagRelationshipMapping;
+class UObject;
 struct FFrame;
 struct FGameplayAbilityTargetDataHandle;
 
@@ -43,7 +44,6 @@ public:
 	GAS_API void ProcessAbilityInput(float DeltaTime, bool bGamePaused);
 	GAS_API void ClearAbilityInput();
 	
-	//TODO ECoreAbilityActivationGroup in CoreGameplayAbility
 	GAS_API bool IsActivationGroupBlocked(ECoreAbilityActivationGroup Group) const;
 	GAS_API void AddAbilityToActivationGroup(ECoreAbilityActivationGroup Group, UCoreGameplayAbility CoreAbility);
 	GAS_API void RemoveAbilityFromActivationGroup(ECoreAbilityActivationGroup Group, UCoreGameplayAbility CoreAbility);
@@ -54,12 +54,12 @@ public:
 	GAS_API void RemoveDynamicTagGameplayEffect(const FGameplayTag& Tag);
 	
 	GAS_API void GetAbilityTargetData(const FGameplayAbilitySpecHandle AbilityHandle,FGameplayAbilityActivationInfo ActivationInfo,FGameplayAbilityTargetDataHandle& OutTargetDataHandle);
-	//TODO UCoreAbilityTagRelationshipMapping
+	
 	GAS_API void SetTargetRelationshipMapping(UCoreAbilityTagRelationshipMapping* NewMapping);
 	
 	GAS_API void GetAdditionalActivationTagRequirements(const FGameplayTagContainer& AbilityTags,FGameplayTagContainer& OutActivationRequired, FGameplayTagContainer& OutActivationBlocked) const;
 	
-	GAS_API void TryActivateAlilitiesOnSpawn(); 
+	GAS_API void TryActivateAbilitiesOnSpawn(); 
 protected:
 	virtual void BeginPlay() override;
 	GAS_API virtual void AbilitySpecInputPressed(FGameplayAbilitySpec& Spec) override;
@@ -85,7 +85,7 @@ protected:
 	
 	TArray<FGameplayAbilitySpecHandle> InputHeldSpecHandles;
 	
-	int32 ActivationGroupCounts [(uint8) ECoreAbilityActivationGroup::MAX];
+	int32 ActivationGroupCounts[static_cast<uint8>(ECoreAbilityActivationGroup::MAX)] = {0};
 };
 
 #undef GAS_API
