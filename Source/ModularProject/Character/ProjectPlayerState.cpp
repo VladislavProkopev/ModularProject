@@ -5,12 +5,12 @@
 #include "CoreAbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
 
-AProjectPlayerState::AProjectPlayerState(const FObjectInitializer ObjectInitializer) : Super(ObjectInitializer)
+AProjectPlayerState::AProjectPlayerState(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UCoreAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
-	NetUpdateFrequency = 100.f;
+	SetNetUpdateFrequency(100.f);
 }
 
 UAbilitySystemComponent* AProjectPlayerState::GetAbilitySystemComponent() const

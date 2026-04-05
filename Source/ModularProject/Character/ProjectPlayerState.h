@@ -17,7 +17,7 @@ class MODULARPROJECT_API AProjectPlayerState : public APlayerState , public IAbi
 {
 	GENERATED_BODY()
 public:
-	AProjectPlayerState(const FObjectInitializer ObjectInitializer = FObjectInitializer::Get());
+	AProjectPlayerState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	
 	//~ Begin IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
