@@ -24,7 +24,7 @@ GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
  * 
  */
 UCLASS(MinimalAPI)
-class COREGAS_API UCoreAttributeSet : public UAttributeSet
+class UCoreAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 public:
