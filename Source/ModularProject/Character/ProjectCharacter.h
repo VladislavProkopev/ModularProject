@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "ProjectCharacter.generated.h"
 
+struct FInputActionValue;
+class UProjectPawnExtensionComponent;
+
 UCLASS()
 class MODULARPROJECT_API AProjectCharacter : public ACharacter
 {
@@ -16,4 +19,12 @@ public:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	UProjectPawnExtensionComponent* GetPawnExtensionComponent() const {return PawnExtensionComponent;}
+	
+private:
+	UPROPERTY(EditDefaultsOnly,Category="Project|GameFeatures")
+	TObjectPtr<UProjectPawnExtensionComponent> PawnExtensionComponent;
+	
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 };
