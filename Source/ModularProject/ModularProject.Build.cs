@@ -8,9 +8,13 @@ public class ModularProject : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","NetCore","Iris" });
+		PublicDependencyModuleNames.AddRange(new string[]
+		{
+			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","NetCore","Iris",
+			"GameplayAbilities","GameplayTags","GameplayTasks", "ModularCore","CoreGAS"
+		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "CoreMovement", "ModularGameplay", "CoreGAS" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "ModularGameplay", "CoreMovement", "GameFeatures" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
