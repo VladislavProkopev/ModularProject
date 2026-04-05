@@ -56,7 +56,7 @@ void UCoreInputComponent::BindAbilityActions(const UCoreInputConfig* InputConfig
 			}
 			if (ReleasedFunc)
 			{
-				BindHandles.Add(BindAction(Action.InputAction,ETriggerEvent::Completed,Object,PressedFunc,Action.InputTag).GetHandle());
+				BindHandles.Add(BindAction(Action.InputAction,ETriggerEvent::Completed,Object,ReleasedFunc,Action.InputTag).GetHandle());
 			}
 		}
 	}
