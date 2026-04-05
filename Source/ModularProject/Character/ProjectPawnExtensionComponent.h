@@ -53,12 +53,14 @@ public:
 	PROJ_API void HandleControllerChanged();
 	// Вызывается из Character::PossessedBy (Server) и Character::OnRep_PlayerState (Client)
 	PROJ_API void HandlePlayerStateReplicated();
-	PROJ_API void SetupPlayerInputComponent();
+	PROJ_API virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	PROJ_API void OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate);
 	PROJ_API void OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate);
 	
 	FProjectPawnReadyDelegate OnProjectPawnReadyDelegate;
 	
+	void Input_AbilityInputTagPressed(FGameplayTag InputTag);
+	void Input_AbilityInputTagReleased(FGameplayTag InputTag);
 protected:
 	
 	PROJ_API virtual void OnRegister() override;
@@ -77,6 +79,7 @@ protected:
 	UPROPERTY(Transient)
 	TObjectPtr<UCoreAbilitySystemComponent> AbilitySystemComponent;
 	
+	TArray<uint32> AbilityInputBindingsHandles;
 };
 
 #undef PROJ_API

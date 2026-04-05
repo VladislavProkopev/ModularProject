@@ -3,6 +3,8 @@
 
 #include "ProjectPawnExtensionComponent.h"
 #include "CoreAbilitySystemComponent.h"
+#include "CoreInputComponent.h"
+#include "ProjectCharacter.h"
 #include "ProjectPlayerState.h"
 #include "Net/UnrealNetwork.h"
 #include "Net/Core/PushModel/PushModel.h"
@@ -29,7 +31,9 @@ void UProjectPawnExtensionComponent::SetPawnData(const UProjectPawnData* InPawnD
 void UProjectPawnExtensionComponent::InitializeAbilitySystem(UCoreAbilitySystemComponent* InASC, AActor* InOwnerActor)
 {
 	APawn* Pawn = GetPawn<APawn>();
+	checkf(Pawn,TEXT("Pawn in UProjectPawnExtensionComponent::InitializeAbilitySystem - Invalid!!!"));
 	
+	AbilitySystemComponent = InASC;
 	InASC->InitAbilityActorInfo(InOwnerActor, Pawn);
 
 	if (PawnData->TagRelationshipMapping)
@@ -46,12 +50,32 @@ void UProjectPawnExtensionComponent::InitializeAbilitySystem(UCoreAbilitySystemC
 			InASC->GiveAbility(PawnData->StartupAbilityTEST)
 			*/
 		}
+		//Применяем стартовый геймплей эффект для инициализации аттрибутов
+		if (PawnData && PawnData->DefaultAttributesGE)
+		{
+			FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+			EffectContext.AddSourceObject(Pawn);
+			
+			FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(PawnData->DefaultAttributesGE,1,EffectContext);
+			if (SpecHandle.IsValid())
+			{
+				AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+		}
 	}
+	
 	OnProjectPawnReadyDelegate.Broadcast();
 }
 
 void UProjectPawnExtensionComponent::UnInitializeAbilitySystem()
 {
+	if (AProjectCharacter* Character = GetPawn<AProjectCharacter>())
+	{
+		if (UCoreInputComponent* CoreIC = Cast<UCoreInputComponent>(Character->InputComponent))
+		{
+			CoreIC->RemoveBinds(AbilityInputBindingsHandles);
+		}
+	}
 }
 
 void UProjectPawnExtensionComponent::HandleControllerChanged()
@@ -63,8 +87,19 @@ void UProjectPawnExtensionComponent::HandlePlayerStateReplicated()
 	CheckDefaultInitialization();
 }
 
-void UProjectPawnExtensionComponent::SetupPlayerInputComponent()
+void UProjectPawnExtensionComponent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	UCoreInputComponent* InputComponent = Cast<UCoreInputComponent>(PlayerInputComponent);
+	if (!InputComponent) return;
+	
+	const UProjectPawnData* CurrentPawnData = GetPawnData<UProjectPawnData>();
+	if (!CurrentPawnData || !CurrentPawnData->InputConfig) return;
+	
+	InputComponent->BindAbilityActions(
+		CurrentPawnData->InputConfig,
+		this,&ThisClass::Input_AbilityInputTagPressed,
+		&ThisClass::Input_AbilityInputTagReleased,
+		AbilityInputBindingsHandles);
 }
 
 void UProjectPawnExtensionComponent::OnAbilitySystemInitialized_RegisterAndCall(
@@ -74,6 +109,22 @@ void UProjectPawnExtensionComponent::OnAbilitySystemInitialized_RegisterAndCall(
 
 void UProjectPawnExtensionComponent::OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate)
 {
+}
+
+void UProjectPawnExtensionComponent::Input_AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->AbilityInputTagPressed(InputTag);
+	}
+}
+
+void UProjectPawnExtensionComponent::Input_AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->AbilityInputTagReleased(InputTag);
+	}
 }
 
 void UProjectPawnExtensionComponent::OnRegister()
