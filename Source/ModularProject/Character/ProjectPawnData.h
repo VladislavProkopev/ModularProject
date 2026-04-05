@@ -7,6 +7,7 @@
 #include "CoreInputConfig.h"
 #include "ProjectPawnData.generated.h"
 
+class UGameplayEffect;
 class UCoreGameplayAbility;
 class UCoreAttributeSet;
 class UCoreAbilityTagRelationshipMapping;
@@ -36,6 +37,9 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|Abilities")
 	TObjectPtr<UCoreGameplayAbility> StartupAbilityTEST;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|GAS")
+	TSubclassOf<UGameplayEffect> DefaultAttributesGE;
 };
 
 #undef PROJ_API
