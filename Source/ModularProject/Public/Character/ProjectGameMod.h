@@ -6,15 +6,26 @@
 #include "GameFramework/GameModeBase.h"
 #include "ProjectGameMod.generated.h"
 
+struct FStreamableHandle;
 class UProjectPawnData;
+
+#define PROJ_API MODULARPROJECT_API
 /**
  * 
  */
-UCLASS()
-class MODULARPROJECT_API AProjectGameMod : public AGameModeBase
+UCLASS(MinimalAPI)
+class AProjectGameMod : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-private:
-	void PreloadPawnData(TSoftObjectPtr<UProjectPawnData> SoftPawnData);
+protected:
+	TSharedPtr<FStreamableHandle> PawnDataLoadHandle;
+	
+	PROJ_API void PreloadPawnData(TSoftObjectPtr<UProjectPawnData> SoftPawnData);
+	
+	UFUNCTION()
+	PROJ_API void OnPawnDataLoaded();
+	
 };
+
+#undef PROJ_API
