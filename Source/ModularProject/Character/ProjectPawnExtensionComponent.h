@@ -53,7 +53,7 @@ public:
 	PROJ_API void HandleControllerChanged();
 	// Вызывается из Character::PossessedBy (Server) и Character::OnRep_PlayerState (Client)
 	PROJ_API void HandlePlayerStateReplicated();
-	PROJ_API virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	PROJ_API virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 	PROJ_API void OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate);
 	PROJ_API void OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate);
 	
