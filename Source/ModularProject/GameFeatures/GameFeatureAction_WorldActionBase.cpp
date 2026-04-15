@@ -3,9 +3,9 @@
 
 #include "GameFeatureAction_WorldActionBase.h"
 
-void UGameFeatureAction_WorldActionBase::OnGameFeatureActivating()
+void UGameFeatureAction_WorldActionBase::OnGameFeatureActivating(FGameFeatureActivatingContext& Context)
 {
-	Super::OnGameFeatureActivating();
+	Super::OnGameFeatureActivating(Context);
 }
 
 void UGameFeatureAction_WorldActionBase::OnGameFeatureDeactivating(FGameFeatureDeactivatingContext& Context)

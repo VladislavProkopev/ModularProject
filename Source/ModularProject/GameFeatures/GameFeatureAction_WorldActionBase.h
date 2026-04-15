@@ -23,7 +23,7 @@ class UGameFeatureAction_WorldActionBase : public UGameFeatureAction
 	GENERATED_BODY()
 public:
 	//~ Begin UGameFeatureAction Interface
-	virtual void OnGameFeatureActivating() override;
+	virtual void OnGameFeatureActivating(FGameFeatureActivatingContext& Context) override;
 	virtual void OnGameFeatureDeactivating(FGameFeatureDeactivatingContext& Context) override;
 	//~ End UGameFeatureAction Interface
 	
