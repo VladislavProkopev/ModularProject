@@ -17,7 +17,6 @@ class MODULARPROJECT_API AProjectCharacter : public ACharacter
 public:
 	AProjectCharacter();
 	virtual void BeginPlay() override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	UProjectPawnExtensionComponent* GetPawnExtensionComponent() const {return PawnExtensionComponent;}
 	
@@ -25,6 +24,4 @@ private:
 	UPROPERTY(EditDefaultsOnly,Category="Project|GameFeatures")
 	TObjectPtr<UProjectPawnExtensionComponent> PawnExtensionComponent;
 	
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
 };
