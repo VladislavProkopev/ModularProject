@@ -4,7 +4,7 @@
 
 #include "Components/GameFrameworkInitStateInterface.h"
 #include "GameplayAbilitySpecHandle.h"
-#include "GameFeatures/GameFeatureAction_AddInputMappingContext.h"
+#include "ModularProject/GameFeatures/GameFeatureAction_AddInputContextMapping.h"
 #include "Components/PawnComponent.h"
 #include "ProjectHeroComponent.generated.h"
 
@@ -65,7 +65,7 @@ public:
 protected:
 	
 	MOD_API virtual void BeginPlay() override;
-	MOD_API virtual void EndPlay(const EEndPlayReason EndPlayReason) override;
+	MOD_API virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	MOD_API virtual void OnRegister() override;
 	
 	MOD_API virtual void InitializePlayerInput(UInputComponent* PlayerInputComponent);
