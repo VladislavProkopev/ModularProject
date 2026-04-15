@@ -7,6 +7,7 @@
 #include "CoreInputConfig.h"
 #include "ProjectPawnData.generated.h"
 
+class UInputMappingContext;
 class UGameplayEffect;
 class UCoreGameplayAbility;
 class UCoreAttributeSet;
@@ -28,6 +29,9 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|Input")
 	TObjectPtr<UCoreInputConfig> InputConfig;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|Input")
+	TObjectPtr<UInputMappingContext> DefaultInputContext;
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category= "Project|Abilities")
 	TObjectPtr<UCoreAbilityTagRelationshipMapping> TagRelationshipMapping;
