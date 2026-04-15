@@ -17,3 +17,8 @@ UAbilitySystemComponent* AProjectPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
+
+UCoreAbilitySystemComponent* AProjectPlayerState::GetCoreAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}

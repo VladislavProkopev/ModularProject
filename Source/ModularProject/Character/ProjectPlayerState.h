@@ -23,6 +23,8 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~ End IAbilitySystemInterface
 	
+	virtual UCoreAbilitySystemComponent* GetCoreAbilitySystemComponent() const;
+	
 protected:
 	UPROPERTY(VisibleAnywhere,Category="Core|PlayerState")
 	TObjectPtr<UCoreAbilitySystemComponent> AbilitySystemComponent;
