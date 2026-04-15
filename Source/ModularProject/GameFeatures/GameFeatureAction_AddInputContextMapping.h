@@ -32,8 +32,8 @@ struct FInputMappingContextAndPriority
 * Adds InputMappingContext to local players' EnhancedInput system. 
  * Expects that local players are set up to use the EnhancedInput system.
  */
-UCLASS(MinimalAPI,Meta = (DisplayName = "Add Input Mapping"))
-class MODULARPROJECT_API UGameFeatureAction_AddInputContextMapping : public UGameFeatureAction_WorldActionBase
+UCLASS(MinimalAPI,meta = (DisplayName = "Add Input Mapping"))
+class UGameFeatureAction_AddInputContextMapping : public UGameFeatureAction_WorldActionBase
 {
 	GENERATED_BODY()
 public:
@@ -45,7 +45,7 @@ public:
 	//~ Begin UGameFeatureAction Interface
 	
 #if WITH_EDITOR
-	virtual EDataValidationResult IsDataValid(class FDataValidationContext& Context) override;
+	virtual EDataValidationResult IsDataValid(class FDataValidationContext& Context) const override;
 #endif
 	
 	UPROPERTY(EditAnywhere,Category="Input")
@@ -59,6 +59,10 @@ private:
 	};
 	/** Delegate for when the game instance is changed to register IMC's */
 	TMap<FGameFeatureStateChangeContext,FPerContextData> ContextData;
+	
+	//Delegate for when the game instance is changed to register IMC's
+	FDelegateHandle RegisterInputContextMappingsForGameInstanceHandle;
+	
 	/** Registers owned Input Mapping Contexts to the Input Registry Subsystem. Also binds onto the start of GameInstances and the adding/removal of Local Players. */
 	void RegisterInputMappingContexts();
 	/** Registers owned Input Mapping Contexts to the Input Registry Subsystem for a specified GameInstance. This also gets called by a GameInstance Start. */
@@ -70,7 +74,7 @@ private:
 	/** Unregisters owned Input Mapping Contexts from the Input Registry Subsystem for a specified GameInstance. */
 	void UnregisterInputContextMappingsForGameInstance(UGameInstance* GameInstance);
 	/** Unregisters owned Input Mapping Contexts from the Input Registry Subsystem for a specified Local Player. This also gets called when a Local Player is removed. */
-	void UnregisterInputContextMappingsForLocalPlayer(ULocalPlayer* LocalPlayer);
+	void UnregisterInputMappingContextsForLocalPlayer(ULocalPlayer* LocalPlayer);
 	
 	//~ Begin UGameFeatureAction_WorldActionBase Interface
 	virtual void AddToWorld(const FWorldContext& WorldContext, const FGameFeatureStateChangeContext& ChangeContext) override;
