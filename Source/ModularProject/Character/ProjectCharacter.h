@@ -20,6 +20,10 @@ public:
 	
 	UProjectPawnExtensionComponent* GetPawnExtensionComponent() const {return PawnExtensionComponent;}
 	
+	virtual void PreInitializeComponents() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 private:
 	UPROPERTY(EditDefaultsOnly,Category="Project|GameFeatures")
 	TObjectPtr<UProjectPawnExtensionComponent> PawnExtensionComponent;
