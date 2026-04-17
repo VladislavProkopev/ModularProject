@@ -16,6 +16,7 @@
 #include "Misc/DataValidation.h"
 #endif
 
+#include "ModularProject/System/CoreAssetManager.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(GameFeatureAction_AddInputContextMapping)
@@ -108,8 +109,7 @@ void UGameFeatureAction_AddInputContextMapping::RegisterInputMappingContextsForL
 {
 	if (ensure(LocalPlayer))
 	{
-		//TODO UCoreAssetManager
-		UCoreAssetManager* AssetManager = UCoreAssetManager::Get();
+		UCoreAssetManager& AssetManager = UCoreAssetManager::Get();
 
 		if (UEnhancedInputLocalPlayerSubsystem* EISubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer))
 		{
@@ -123,7 +123,7 @@ void UGameFeatureAction_AddInputContextMapping::RegisterInputMappingContextsForL
 					}
 					
 					//Register this IMC with the settings!
-					if (UInputMappingContext* IMC = AssetManager->GetAsset(Entry.InputMapping))
+					if (UInputMappingContext* IMC = AssetManager.GetAsset(Entry.InputMapping))
 					{
 						Settings->RegisterInputMappingContext(IMC);
 					}
