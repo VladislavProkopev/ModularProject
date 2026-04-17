@@ -62,13 +62,15 @@ public:
 	MOD_API virtual void OnActorInitStateChanged(const FActorInitStateChangedParams& Params) override;
 	MOD_API virtual void CheckDefaultInitialization() override;
 	//~ End IGameFrameworkInitStateInterface
+	
+	MOD_API virtual void InitializePlayerInput(UInputComponent* PlayerInputComponent);
 protected:
 	
 	MOD_API virtual void BeginPlay() override;
 	MOD_API virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	MOD_API virtual void OnRegister() override;
 	
-	MOD_API virtual void InitializePlayerInput(UInputComponent* PlayerInputComponent);
+	
 	
 	MOD_API void Input_AbilityInputTagPressed(FGameplayTag InputTag);
 	MOD_API void Input_AbilityInputTagReleased(FGameplayTag InputTag);

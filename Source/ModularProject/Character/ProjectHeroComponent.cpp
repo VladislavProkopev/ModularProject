@@ -438,6 +438,8 @@ void UProjectHeroComponent::BeginPlay()
 	//Notifies that we are done spawning, then try the rest of initialization
 	ensure(TryToChangeInitState(CoreGameplayTags::GameFeaturesDataStates::InitState_Spawned));
 	CheckDefaultInitialization();
+	
+	UE_LOG(Log_ProjectHeroComponent,Warning,TEXT("UProjectHeroComponent::BeginPlay()"));
 }
 
 
