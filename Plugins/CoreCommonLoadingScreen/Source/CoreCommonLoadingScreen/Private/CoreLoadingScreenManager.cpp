@@ -1,4 +1,5 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "CoreLoadingScreenManager.h"
@@ -19,11 +20,13 @@
 #include "PreLoadScreenManager.h"
 
 #include "ShaderPipelineCache.h"
-//TODO CommonLoadinScreenSettings
-#include "CommonLoadinScreenSettings.h"
+#include "CoreCommonLoadingScreen/Public/CoreLoadingScreenManager.h"
 
+#include "CoreCommonLoadingScreenSettings.h"
 #include "Widgets/Images/SThrobber.h"
 #include "Blueprint/UserWidget.h"
+
+#include "Net/UnrealNetwork.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(CoreLoadingScreenManager)
 
@@ -97,8 +100,8 @@ public:
 		return !GIsEditor;
 	}
 	
-	//~ IInputProcess Inretface
-	virtual void Tick(const float DeltaTime, FSlateApplication& SlateApp, TSharedRef<ICursor> Cursor) override;
+	//~ IInputProcess Interface
+	virtual void Tick(const float DeltaTime, FSlateApplication& SlateApp, TSharedRef<ICursor> Cursor) override{};
 	
 	virtual bool HandleKeyDownEvent(FSlateApplication& SlateApp, const FKeyEvent& InKeyEvent) override {return  CanEatInput();}
 	virtual bool HandleKeyUpEvent(FSlateApplication& SlateApp, const FKeyEvent& InKeyEvent) override{return  CanEatInput();}
@@ -109,9 +112,10 @@ public:
 	virtual bool HandleMouseButtonDoubleClickEvent(FSlateApplication& SlateApp, const FPointerEvent& MouseEvent) override {return CanEatInput();}
 	virtual bool HandleMouseWheelOrGestureEvent(FSlateApplication& SlateApp, const FPointerEvent& InWheelEvent, const FPointerEvent* InGestureEvent) override {return CanEatInput();}
 	virtual bool HandleMotionDetectedEvent(FSlateApplication& SlateApp, const FMotionEvent& MotionEvent) override {return CanEatInput();}
-	//~ End IInputProcess Inretface
+	//~ End IInputProcess Interface
 	
 };
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ULoadingScreenManager
@@ -217,8 +221,7 @@ void UCoreLoadingScreenManager::UpdateLoadingScreen()
 
 	if (ShouldShowLoadingScreen())
 	{
-		//TODO UCommonLoadingScreenSettings
-		const UCommonLoadingScreenSettings* Settings = GetDefault<UCommonLoadingScreenSettings>();
+		const UCoreCommonLoadingScreenSettings* Settings = GetDefault<UCoreCommonLoadingScreenSettings>();
 		
 		//If we don't make it to the specified checkpoint in the given time will trigger the hang detector so we can better determine where progress stalled.
 		FThreadHeartBeat::Get().MonitorCheckpointStart(GetFName(),Settings->LoadingScreenHeartbeatHangDuration);
@@ -396,8 +399,7 @@ bool UCoreLoadingScreenManager::CheckForAnyNeedToShowLoadingScreen()
 
 bool UCoreLoadingScreenManager::ShouldShowLoadingScreen()
 {
-	//TODO UCommonLoadingScreenSettings
-	const UCommonLoadingScreenSettings* Settings = GetDefault<UCoreLoadingScreenSettings>();
+	const UCoreCommonLoadingScreenSettings* Settings = GetDefault<UCoreCommonLoadingScreenSettings>();
 	
 	//Check debugging commands that force the state one way or another
 #if !UE_BUILD_SHIPPING
@@ -479,9 +481,9 @@ void UCoreLoadingScreenManager::ShowLoadingScreen()
 	
 	bCurrentlyShowingLoadingScreen = true;
 	
-	CSV_EVENT(LogLoadingScreen,TEXT("Show"));
+	CSV_EVENT(LoadingScreen,TEXT("Show"));
 	
-	const UCoreLoadingScreenSettings* Settings = GetDefault<UCoreLoadingScreenSettings>();
+	const UCoreCommonLoadingScreenSettings* Settings = GetDefault<UCoreCommonLoadingScreenSettings>();
 
 	if (IsShowingInitialLoadingScreen())
 	{
@@ -500,7 +502,7 @@ void UCoreLoadingScreenManager::ShowLoadingScreen()
 		
 		LoadingScreenVisibilityChanged.Broadcast(/**bIsVisible*/ true);
 		
-		//Create the loading screeen widget
+		//Create the loading screen widget
 		TSubclassOf<UUserWidget> LoadingScreenWidgetClass = Settings->LoadingScreenWidget.TryLoadClass<UUserWidget>();
 		if (UUserWidget* UserWidget = UUserWidget::CreateWidgetInstance(*LocalGameInstance,LoadingScreenWidgetClass,NAME_None))
 		{
@@ -537,12 +539,12 @@ void UCoreLoadingScreenManager::HideLoadingScreen()
 
 	if (IsShowingInitialLoadingScreen())
 	{
-		UE_LOG(LogLoadingScreen,Log,TEXT("Hidding loading screen when 'IsShowingInitialLoadingScreen()' is true"));
+		UE_LOG(LogLoadingScreen,Log,TEXT("Hiding loading screen when 'IsShowingInitialLoadingScreen()' is true"));
 		UE_LOG(LogLoadingScreen,Log,TEXT("%s"),*DebugReasonForShowingOrHidingLoadingScreen);
 	}
 	else
 	{
-		UE_LOG(LogLoadingScreen,Log,TEXT("Hidding loading screen when 'IsShowingInitialLoadingScreen()' is false"));
+		UE_LOG(LogLoadingScreen,Log,TEXT("Hiding loading screen when 'IsShowingInitialLoadingScreen()' is false"));
 		UE_LOG(LogLoadingScreen,Log,TEXT("%s"),*DebugReasonForShowingOrHidingLoadingScreen);
 		
 		UE_LOG(LogLoadingScreen,Log,TEXT("Garbage Collecting before dropping loading screen"));
@@ -550,10 +552,10 @@ void UCoreLoadingScreenManager::HideLoadingScreen()
 		
 		RemoveWidgetFromViewport();
 		
-		ChangePerformSettings(/** bEnableLoadingScreen */false);
+		ChangePerformSettings(/* bEnableLoadingScreen */false);
 		
 		//Let observers know that the loading screen is done
-		LoadingScreenVisibilityChanged.Broadcast(/** bIsVisible */false);
+		LoadingScreenVisibilityChanged.Broadcast(/* bIsVisible */ false);
 	}
 	
 	CSV_EVENT(LoadingScreen,TEXT("Hide"));
@@ -595,26 +597,26 @@ void UCoreLoadingScreenManager::StopBlockingInput()
 	}
 }
 
-void UCoreLoadingScreenManager::ChangePerformSettings(bool bEnabingLoadingScreen)
+void UCoreLoadingScreenManager::ChangePerformSettings(bool bEnablingLoadingScreen)
 {
 	UGameInstance* GameInstance = GetGameInstance();
 	UGameViewportClient* GameViewportClient = GameInstance->GetGameViewportClient();
 	
-	FShaderPipelineCache::SetBatchMode(bEnabingLoadingScreen ? FShaderPipelineCache::BatchMode::Fast : FShaderPipelineCache::BatchMode::Background);
+	FShaderPipelineCache::SetBatchMode(bEnablingLoadingScreen ? FShaderPipelineCache::BatchMode::Fast : FShaderPipelineCache::BatchMode::Background);
 	
 	//Don't bother drawing the 3d world while we're loading
-	GameViewportClient->bDisableWorldRendering = bEnabingLoadingScreen;
+	GameViewportClient->bDisableWorldRendering = bEnablingLoadingScreen;
 	
 	//Make sure to prioritize streaming in levels if the loading screen is up
 	if (UWorld* ViewportWorld = GameViewportClient->GetWorld())
 	{
 		if (AWorldSettings* WorldSettings = ViewportWorld->GetWorldSettings(false,false))
 		{
-			WorldSettings->bHighPriorityLoadingLocal = bEnabingLoadingScreen;
+			WorldSettings->bHighPriorityLoadingLocal = bEnablingLoadingScreen;
 		}
 	}
 
-	if (bEnabingLoadingScreen)
+	if (bEnablingLoadingScreen)
 	{
 		//Set a new hang detector timeout multiplier when the loading is visible.
 		double HangDurationMultiplier;
@@ -636,4 +638,5 @@ void UCoreLoadingScreenManager::ChangePerformSettings(bool bEnabingLoadingScreen
 		FGameThreadHitchHeartBeat::Get().ResumeHeartBeat();
 	}
 }
+
 
