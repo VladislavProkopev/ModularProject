@@ -1,20 +1,18 @@
-﻿/*// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "Components/GameStateComponent.h"
-//TODO CoreLoadingProcessInrerface
-#include "CoreLoadingProcessInrerface.h"
+#include "CoreCommonLoadingScreen/Public/LoadingProcessInterface.h"
 #include "CoreExperienceManagerComponent.generated.h"
 
 #define MOD_API MODULARPROJECT_API
 
 namespace UE::GameFeatures{	struct FResult;}
 
-//TODO UCoreExperienceDefinition
 class UCoreExperienceDefinition;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnCoreExperienceLoaded,const UCoreExperienceDefinition* /*Experience #1#);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnCoreExperienceLoaded,const UCoreExperienceDefinition* /*Experience */);
 
 enum class ECoreExperienceLoadState
 {
@@ -28,13 +26,13 @@ enum class ECoreExperienceLoadState
 };
 
 UCLASS(MinimalAPI)
-class UCoreExperienceManagerComponent : public UGameStateComponent , public ILoadingProcessInrerface
+class UCoreExperienceManagerComponent : public UGameStateComponent , public ILoadingProcessInterface
 {
 	GENERATED_BODY()
 
 public:
 	MOD_API UCoreExperienceManagerComponent(const FObjectInitializer& Initializer = FObjectInitializer::Get());
-	
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	//~ UActorComponent Interface
 	MOD_API virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	//~ End UActorComponent Interface
@@ -75,7 +73,7 @@ private:
 	void OnGameFeaturePluginLoadComplete(const UE::GameFeatures::FResult& Result);
 	void OnExperienceFullLoadComplete();
 	
-	void OnActivationDeactivationCompleted();
+	void OnActionDeactivationCompleted();
 	void OnAllActionsDeactivated();
 	
 	
@@ -93,13 +91,13 @@ private:
 	/**
 	 * Delegate called when the experience has finished loading juist before others
 	 * (e.g., subsystems that set up for regular gameplay)
-	 #1#
+	 */
 	FOnCoreExperienceLoaded OnCoreExperienceLoaded_HighPriority;
 	
-	/** Delegate called when the experience has finished loading #1#
+	/** Delegate called when the experience has finished loading */
 	FOnCoreExperienceLoaded OnCoreExperienceLoaded;
 	
-	/** Delegate called when the experience has finished loading #1#
+	/** Delegate called when the experience has finished loading */
 	FOnCoreExperienceLoaded OnCoreExperienceLoaded_LowPriority;
 };
-#undef MOD_API*/
+#undef MOD_API
