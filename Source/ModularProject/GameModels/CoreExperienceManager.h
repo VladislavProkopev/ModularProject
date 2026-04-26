@@ -1,0 +1,30 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "Subsystems/EngineSubsystem.h"
+#include "CoreExperienceManager.generated.h"
+
+/**
+ * Manager for experiences - primarily for arbitration between multiple PIE sessions
+ */
+UCLASS(MinimalAPI)
+class UCoreExperienceManager : public UEngineSubsystem
+{
+	GENERATED_BODY()
+public:
+#if WITH_EDITOR
+	MODULARPROJECT_API void OnPlayInEditorBegun();
+	
+	static void NotifyOfPluginActivation(const FString PluginURL);
+	static bool RequestToDeactivatePlugin(const FString PluginURL);
+#else
+	static void NotifyOfPluginActivation(const FString PluginURL);
+	static bool RequestToDeactivatePlugin(const FString PluginURL);
+#endif
+private:
+	//The map of requests to activate count for a given game feature plugin
+	//(to allow first in, last out activation management during PIE)
+	TMap<FString,int32> GameFeaturePluginRequestCountMap;
+	
+};
