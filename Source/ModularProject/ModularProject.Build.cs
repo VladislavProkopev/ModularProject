@@ -11,7 +11,8 @@ public class ModularProject : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","NetCore","Iris",
-			"GameplayAbilities","GameplayTags","GameplayTasks", "ModularCore","CoreGAS"
+			"GameplayAbilities","GameplayTags","GameplayTasks", "ModularCore","CoreGAS","CoreCommonLoadingScreen",
+			"CommonGame","AudioModulation"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "ModularGameplay", "CoreMovement", "GameFeatures" });
