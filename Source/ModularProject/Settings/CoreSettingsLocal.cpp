@@ -1,6 +1,35 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CoreSettingsLocal.h"
+#include "Engine/Engine.h"
+#include "Framework/Application/SlateApplication.h"
+#include "Engine/World.h"
+#include "Misc/App.h"
+#include "CommonInputSubsystem.h"
+#include "GenericPlatform/GenericPlatformFramePacer.h"
+//TODO ModularProject/Player/CoreLocalPlayer.h
+#include "ModularProject/Player/CoreLocalPlayer.h"
+#include "Performance/LatencyMarkerModule.h"
+//TODO ModularProject/Performance/CorePrfomanceStateTypes.h
+#include "ModularProject/Performance/CorePrfomanceStateTypes.h"
+#include "ICommonUIModule.h"
+#include "CommonUISettings.h"
+#include "SoundControlBusMix.h"
+#include "Widgets/Layout/SSafeZone.h"
+//TODO ModularProject/Performance/CorePerformanceSettings.h
+#include "ModularProject/Performance/CorePerformanceSettings.h"
+#include "DeviceProfiles/DeviceProfileManager.h"
+#include "DeviceProfiles/DeviceProfile.h"
+#include "HAL/PlatformFramePacer.h"
+//TODO ModularProject/Development/CorePlatformEmulationSettings.h
+#include "ModularProject/Development/CorePlatformEmulationSettings.h"
+#include "SoundControlBus.h"
+#include "AudioModulationStatics.h"
+//TODO ModularProject/Audio/CoreAudioSettings.h
+#include "ModularProject/Audio/CoreAudioSettings.h"
+//TODO ModularProject//Audio/CoreAudioMixEffectsSubsystem.h
+#include "ModularProject/Audio/CoreAudioMixEffectsSubsystem.h"
+
 
 UCoreSettingsLocal::UCoreSettingsLocal()
 {
