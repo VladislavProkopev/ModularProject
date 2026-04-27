@@ -445,5 +445,5 @@ private:
 	void OnAppActivationStateChanged(bool bIsActive);
 	void ReapplyThingDueToPossibleDeviceProfileChange();
 private:
-	FDelegateHandle OnAppActivationStateChangedDelegateHandle;
+	FDelegateHandle OnApplicationActivationStateChangedHandle;
 };
